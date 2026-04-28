@@ -1,0 +1,12 @@
+﻿# IntelliJ / Rider / JetBrains
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+**/.idea/**
+
+# Build outputs
+bin/
+obj/
