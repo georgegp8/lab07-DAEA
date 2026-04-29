@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Controllers;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Newtonsoft.Json;
 
 namespace Lab07_GeorgeGuerra.Middlewares;
@@ -37,13 +38,20 @@ public class ParameterValidationMiddleware
 
         if (!string.IsNullOrEmpty(contentType) && contentType.Contains("application/json"))
         {
-            context.Request.EnableBuffering();
+            context.Request.EnableBuffering(); 
 
             using var reader = new StreamReader(context.Request.Body, leaveOpen: true);
             var body = await reader.ReadToEndAsync();
-            context.Request.Body.Position = 0;
-            var dtoType = context.GetEndpoint()?.Metadata?.OfType<ControllerActionDescriptor>()
-                .FirstOrDefault()?.MethodInfo?.GetParameters().FirstOrDefault()?.ParameterType;
+
+            context.Request.Body.Position = 0; 
+
+            var dtoType = context.GetEndpoint()?.Metadata
+                ?.OfType<ControllerActionDescriptor>()
+                .FirstOrDefault()
+                ?.MethodInfo
+                ?.GetParameters()
+                .FirstOrDefault()
+                ?.ParameterType;
 
             if (dtoType != null)
             {
@@ -51,20 +59,26 @@ public class ParameterValidationMiddleware
                 return model;
             }
         }
+
         return null;
     }
     private List<string> ValidateModel(object model)
     {
         var errors = new List<string>();
         var properties = model.GetType().GetProperties();
+
         foreach (var property in properties)
         {
             var value = property.GetValue(model);
-            if (value == null)
+
+            var isRequired = Attribute.IsDefined(property, typeof(RequiredAttribute));
+
+            if (isRequired && value == null)
             {
                 errors.Add($"El parámetro '{property.Name}' es obligatorio.");
             }
         }
+
         return errors;
     }
 }

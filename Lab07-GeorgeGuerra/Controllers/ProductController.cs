@@ -5,11 +5,13 @@ namespace Lab07_GeorgeGuerra.Controllers;
 
 [ApiController]
 [Route("api/products")]
+
 public class ProductController : ControllerBase
 {
     [HttpPost]
-    public IActionResult CreateProduct([FromBody] CreateProductDto product)
+    public IActionResult CreateProduct([FromBody] CreateProductDto product, [FromHeader(Name = "role")] string role)
     {
-        return Ok(new { message = "Producto creado exitosamente." });
+        throw new Exception("Error de prueba");
+        //return Ok(new { message = "Producto creado exitosamente." });
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Lab07_GeorgeGuerra.Controllers;
+namespace Lab07_GeorgeGuerra.Middlewares;
 
 public partial class ErrorHandlingMiddleware
 {
@@ -19,7 +19,7 @@ public partial class ErrorHandlingMiddleware
         }
         catch (Exception ex)
         {
-            context.Response.StatusCode = 500; // Internal Server Error
+            context.Response.StatusCode = 400; // Internal Server Error
             context.Response.ContentType = "application/json";
             var errorResponse = new { message = "Ocurrio un error interno", details = ex.Message };
             await context.Response.WriteAsync(JsonConvert.SerializeObject(errorResponse)); // Enviar la respuesta personalizada

@@ -11,11 +11,11 @@ public partial class RoleBasedAccessMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        var userRole = context.Request.Headers["X-Role"].FirstOrDefault();
+        var userRole = context.Request.Headers["role"].FirstOrDefault();
 
         if (string.IsNullOrEmpty(userRole) || userRole != "Admin")
         {
-            context.Response.StatusCode = 403; // Forbidden
+            context.Response.StatusCode = 401; // Forbidden
             await context.Response.WriteAsync("Acceso denegado. El rol del usuario no tiene permisos.");
             return;
         }
